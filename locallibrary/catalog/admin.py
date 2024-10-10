@@ -1,17 +1,22 @@
 from django.contrib import admin
-from .models import Author, Genre, Book, BookInstance
+from .models import Author, Book, BookInstance
 
 # admin.site.register(Book)
-# admin.site.register(Genre)
 # admin.site.register(BookInstance)
+
+class AuthorInline(admin.TabularInline):
+    model = Book
+    extra = 0
+    exclude = ['isbn']
 
 # Define the admin class
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('last_name', 'first_name', 'date_of_birth', 'date_of_death')
-    
+    inlines = [AuthorInline]
+
     # orients the fields,
     # vertically for the names and horizontally for the dates,
-    # in the author's view on theadmin page
+    # in the author's view on the admin page
     fields = ['first_name', 'last_name', ('date_of_birth', 'date_of_death')]
 
 # Register the admin class with the associated model.
@@ -34,7 +39,7 @@ class BookAdmin(admin.ModelAdmin):
 
 @admin.register(BookInstance)
 class BookInstanceAdmin(admin.ModelAdmin):
-    list_display = ('display_status', 'display_expected_return_date', 'book')
+    list_display = ('book', 'display_status', 'display_expected_return_date', 'id')
     list_filter = ('status', 'due_back')
 
 # Adds sections to the detail view of the book instance.

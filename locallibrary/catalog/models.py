@@ -29,7 +29,8 @@ class Genre(models.Model):
             UniqueConstraint(
                 Lower('name'),
                 name='genre_name_case_insensitive_unique',
-                violation_error_message='A genre with the same name already exists.(case insensitice match)'
+                violation_error_message='A genre with the same name already exists.\
+                    (case insensitive match)'
             )
         ]
 
@@ -44,7 +45,8 @@ class Book(models.Model):
         max_length=1000, help_text="Enter a brief description of the book")
     isbn = models.CharField('ISBN', max_length=13,
                             unique=True,
-                            help_text='13 Character <a href="https://www.isbn-international.org/content/what-isbn'
+                            help_text='13 Character <a href=\
+                                "https://www.isbn-international.org/content/what-isbn'
                                       '">ISBN number</a>')
 
     # ManyToManyField used because genre can contain many books. Books can cover many genres.
@@ -103,13 +105,13 @@ class BookInstance(models.Model):
         """String representing the status of the book instance. in admin page"""
         return f'{self.status}'
     display_status.short_description = 'Status'
-    
+
     def display_expected_return_date(self):
         """String representing the expected return date of the book instance. in admin page"""
         return f'{self.due_back}'
-    
+
     display_expected_return_date.short_description = 'Due Back'
-    
+
 class Author(models.Model):
     """Model representing an author."""
     first_name = models.CharField(max_length=100)
