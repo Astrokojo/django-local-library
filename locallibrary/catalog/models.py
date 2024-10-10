@@ -60,6 +60,13 @@ class Book(models.Model):
         """Returns the URL to access a detail record for this book."""
         return reverse('book-detail', args=[str(self.id)])
 
+    # this is used to display the genre in the admin page
+    # it's a costly operation as it will query the database for each book
+    def display_genre(self):
+        """Create a string for the Genre. This is required to display genre in Admin."""
+        return ', '.join(genre.name for genre in self.genre.all()[:3])
+
+    display_genre.short_description = 'Genre'
 
 class BookInstance(models.Model):
 
@@ -92,6 +99,17 @@ class BookInstance(models.Model):
         """String for representing the Model object."""
         return f'{self.id} ({self.book.title})'
 
+    def display_status(self):
+        """String representing the status of the book instance. in admin page"""
+        return f'{self.status}'
+    display_status.short_description = 'Status'
+    
+    def display_expected_return_date(self):
+        """String representing the expected return date of the book instance. in admin page"""
+        return f'{self.due_back}'
+    
+    display_expected_return_date.short_description = 'Due Back'
+    
 class Author(models.Model):
     """Model representing an author."""
     first_name = models.CharField(max_length=100)
