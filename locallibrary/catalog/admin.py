@@ -39,7 +39,7 @@ class BookAdmin(admin.ModelAdmin):
 
 @admin.register(BookInstance)
 class BookInstanceAdmin(admin.ModelAdmin):
-    list_display = ('book', 'display_status', 'display_expected_return_date', 'id')
+    list_display = ('book', 'display_status','borrower', 'display_expected_return_date', 'id')
     list_filter = ('status', 'due_back')
 
 # Adds sections to the detail view of the book instance.
@@ -49,6 +49,6 @@ class BookInstanceAdmin(admin.ModelAdmin):
             'fields': ('book', 'imprint', 'id')
         }),
         ('Availability', {
-            'fields': ('status', 'due_back')
+            'fields': ('status', 'due_back', 'borrower')
         }),
     )
