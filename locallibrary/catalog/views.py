@@ -56,7 +56,7 @@ class BookListView(generic.ListView):
 
     #  A more flexible way to filter the books is to override the get_queryset(). No real benefit tho.
     def get_queryset(self):
-        return Book.objects.filter(title__icontains='a')[:5]
+        return Book.objects.all().order_by('title')
 
     template_name = 'book_list.html'  # the template name/location
 
@@ -91,6 +91,8 @@ class AuthorDetailView(generic.DetailView):
     def author_detail_view(request, primary_key):
         author = get_object_or_404(Author, pk=primary_key)
         return render(request, 'catalog/author_detail.html', context={'author': author})
+    
+
     
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
@@ -163,7 +165,7 @@ class AuthorCreate(PermissionRequiredMixin, CreateView):
 
 class AuthorUpdate(PermissionRequiredMixin, UpdateView):
     model = Author
-    # Not recommended (potential security issue if more fields added)
+    # fields = '__all__' is not recommended (potential security issue if more fields added)
     fields = '__all__'
     permission_required = 'catalog.change_author'
 
@@ -180,3 +182,34 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
             return HttpResponseRedirect(
                 reverse("author-delete", kwargs={"pk": self.object.pk})
             )
+
+class BookCreate(PermissionRequiredMixin, CreateView):
+    model = Book
+    fields = '__all__'
+    permission_required = 'catalog.add_book'
+    
+class BookUpdate(PermissionRequiredMixin, UpdateView):
+    model = Book
+    fields = '__all__'
+    permission_required = 'catalog.change_book'
+    
+class BookDelete(PermissionRequiredMixin, DeleteView):
+    model = Book
+    success_url = reverse_lazy('books')
+    permission_required = 'catalog.delete_book'
+
+    def form_valid(self, form):
+        try:
+            self.object.delete()
+            return HttpResponseRedirect(self.success_url)
+        except Exception as e:
+            return HttpResponseRedirect(
+                reverse("book-delete", kwargs={"pk": self.object.pk})
+            )
+            
+class BookInstanceDetailView(generic.DetailView):
+    model = BookInstance
+    
+    def book_instance_detail_view(request, primary_key):
+        book_instance = get_object_or_404(BookInstance, pk=primary_key)
+        return render(request, 'catalog/book_instance_detail.html', context={'book_instance': book_instance})

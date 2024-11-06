@@ -46,9 +46,20 @@
           <hr>
           <ul class="sidebar-nav">
             <li>Staff</li>
-            <li><a href="{% url 'all-borrowed' %}">All Borrowed</a></li>
+            <li><a href="{% url 'all-borrowed' %}">Borrowed books list</a></li>
             {% if perms.catalog.add_author %}
             <li><a href="{% url 'author-create' %}">Create author</a></li>
+            {% endif %}
+            {% if perms.catalog.change_author %}
+            <li><a href="{% url 'authors'%}">Update author</a></li>
+            {% endif %}
+            {% if perms.catalog.add_book %}
+            <li><a href="{% url 'book-create' %}">Create book</a></li>
+            {% endif %}
+            {% if perms.catalog.change_book %}
+            <li><a href="{% url 'books'%}">Update book</a></li>
+            {% endif %}
+            {% if perms.catalog.add_bookinstance %}
             {% endif %}
           </ul>
             {% endif %}
