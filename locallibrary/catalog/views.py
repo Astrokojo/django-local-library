@@ -80,7 +80,7 @@ class BookDetailView(generic.DetailView):
 
 class AuthorListView(generic.ListView):
     model = Author
-    paginate_10 = 10
+    paginate_by = 10
     context_object_name = 'author_list'
     queryset = Author.objects.all().order_by('last_name')
     template_name = 'author_list.html'
@@ -213,3 +213,9 @@ class BookInstanceDetailView(generic.DetailView):
     def book_instance_detail_view(request, primary_key):
         book_instance = get_object_or_404(BookInstance, pk=primary_key)
         return render(request, 'catalog/book_instance_detail.html', context={'book_instance': book_instance})
+    
+import uuid
+
+from django.contrib.auth.models import Permission # Required to grant the permission needed to set a book as returned.
+
+
