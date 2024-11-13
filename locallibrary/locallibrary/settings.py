@@ -160,3 +160,4 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+ALLOWED_HOSTS = ['Astrokojo.pythonanywhere.com', '127.0.0.1']
